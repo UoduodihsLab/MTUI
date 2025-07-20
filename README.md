@@ -1,6 +1,6 @@
-# tccui
+# MTUI
 
-An Electron application with Vue
+Desktop application of MTCore
 
 ## Recommended IDE Setup
 

@@ -1,10 +1,10 @@
 {
-  "name": "tccui",
+  "name": "MTUI",
   "version": "1.0.0",
   "description": "An Electron application with Vue",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "author": "Uoduodihs",
+  "homepage": "https://uoduodihs.com",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",
