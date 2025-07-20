@@ -44,7 +44,7 @@ const selectedLang = ref('en')
 
 const tasks = ref([])
 
-async function get_tasks(page = 1, size = 10, status = null) {
+async function getTasks(page = 1, size = 10, status = null) {
   try {
     const res = await api.get(`/tasks?page=1&size=10`)
     tasks.value = res.data.tasks
@@ -53,8 +53,30 @@ async function get_tasks(page = 1, size = 10, status = null) {
   }
 }
 
+function typeLabel(value){
+  switch(value){
+    case 0:
+      return '导入账号'
+    case 1:
+      return '频道创建'
+  }
+}
+
+function statusLabel(value){
+  switch(value){
+    case 0:
+      return '待执行'
+    case 1:
+      return '执行中'
+    case 2:
+      return '已完成'
+    case 3:
+      return '失败'
+  }
+}
+
 onMounted(() => {
-  get_tasks()
+  getTasks()
 })
 </script>
 
@@ -66,15 +88,30 @@ onMounted(() => {
       </el-space>
     </div>
     <div style="margin-top: 12px">
-      <el-table :data="tasks">
+      <el-table :data="tasks" border>
         <el-table-column prop="id" label="编号"></el-table-column>
-        <el-table-column prop="title" label="名称"></el-table-column>
-        <el-table-column prop="t_type" label="类型"></el-table-column>
-        <el-table-column prop="args" label="参数"></el-table-column>
-        <el-table-column prop="status" label="状态"></el-table-column>
+        <el-table-column prop="title" label="名称" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="t_type" label="类型">
+          <template #default="scope">
+            <span>{{ typeLabel(scope.row.t_type) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="args" label="参数" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="status" label="状态">
+          <template #default="scope">
+            <span>{{ statusLabel(scope.row.status) }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="progress" label="进度"></el-table-column>
-        <el-table-column prop="create_at" label="创建时间"></el-table-column>
-        <el-table-column prop="op" label="操作"></el-table-column>
+        <el-table-column prop="create_at" label="创建时间" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="op" label="操作" fixed="right">
+          <template #default="scope">
+            <el-space>
+              <el-button type="primary" size="small">详情</el-button>
+              <el-button type="success" size="small">启动</el-button>
+            </el-space>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <el-dialog v-model="dialogVisible" title="创建任务" width="500">
@@ -98,7 +135,7 @@ onMounted(() => {
             <el-input v-model="channelCount" type="number" placeholder="输入需要创建的频道数量" />
           </el-space>
         </div>
-        <div style="margin-top: 12px;">
+        <div style="margin-top: 12px">
           <el-space>
             <span>选择频道语言: </span>
             <el-select v-model="selectedLang" placeholder="选择语言">
