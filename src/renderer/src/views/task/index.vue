@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { api } from '../../api/http'
 
 const dialogVisible = ref(false)
@@ -14,8 +14,55 @@ const taskTypes = ref([
   }
 ])
 
-const channelCount = ref(5)
-const selectedType = ref(0)
+const tasks = ref([])
+async function getTasks(page = 1, size = 10, status = null) {
+  try {
+    const res = await api.get(`/tasks?page=1&size=10`)
+    tasks.value = res.data.tasks
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function getRunningTasksCount() {
+  try {
+    const result = await api.get(`/tasks?status=1`)
+    if (result.code == 200) {
+      return result.data.count
+    }
+  } catch (error) {
+    console.error(error)
+  }
+  return 0
+}
+
+function statusLabel(value) {
+  switch (value) {
+    case 0:
+      return '待执行'
+    case 1:
+      return '执行中'
+    case 2:
+      return '已完成'
+    case 3:
+      return '失败'
+  }
+}
+
+function typeLabel(value) {
+  switch (value) {
+    case 0:
+      return '导入账号'
+    case 1:
+      return '创建频道'
+  }
+}
+
+function progressLabel(progress, total) {
+  return Math.round((progress / total) * 100 * 100) / 100
+}
+
+const selectedType = ref(null)
 
 const languages = ref([
   {
@@ -40,43 +87,72 @@ const languages = ref([
   }
 ])
 
-const selectedLang = ref('en')
+const taskTitle = ref('')
+const channelCount = ref(1)
+const channelTitle = ref('Channel')
+const botUsername = ref('')
+const selectedLang = ref(null)
 
-const tasks = ref([])
+const sessions_dir = ref('')
 
-async function getTasks(page = 1, size = 10, status = null) {
+async function createTask() {
+  let args = []
+  if (selectedType.value === 0) {
+    args = [sessions_dir.value]
+  } else if (selectedType.value === 1) {
+    args = [channelCount.value, selectedLang.value, channelTitle.value, botUsername.value]
+  }
+
+  const willCheck = [taskTitle.value, ...args]
+
+  if (!willCheck.every((value) => value)) {
+    console.error('不合法的参数')
+    ElMessage.error('不合法的参数')
+    return
+  }
   try {
-    const res = await api.get(`/tasks?page=1&size=10`)
-    tasks.value = res.data.tasks
+    const data = {
+      title: taskTitle.value,
+      t_type: selectedType.value,
+      args: args
+    }
+    const result = await api.post('/tasks', data)
+
+    if (result.code === 201) {
+      ElMessage.success(result.message)
+      getTasks()
+      dialogVisible.value = false
+    } else {
+      ElMessage.error(result.message)
+    }
   } catch (error) {
-    console.log(error)
+    ElMessage.error('网络错误')
   }
 }
 
-function typeLabel(value){
-  switch(value){
-    case 0:
-      return '导入账号'
-    case 1:
-      return '频道创建'
+async function startTask(taskId) {
+  try {
+    const result = await api.post(`/tasks/start/${taskId}`)
+    if (result.code === 200) {
+      ElMessage.success(result.message)
+    } else {
+      EleMessage.error(result.message)
+    }
+  } catch {
+    EleMessage.error('网络错误')
   }
 }
 
-function statusLabel(value){
-  switch(value){
-    case 0:
-      return '待执行'
-    case 1:
-      return '执行中'
-    case 2:
-      return '已完成'
-    case 3:
-      return '失败'
-  }
-}
-
+let interval = null
 onMounted(() => {
   getTasks()
+  interval = setInterval(async () => {
+    await getTasks()
+  }, 1000)
+})
+
+onUnmounted(() => {
+  clearInterval(interval)
 })
 </script>
 
@@ -97,18 +173,34 @@ onMounted(() => {
           </template>
         </el-table-column>
         <el-table-column prop="args" label="参数" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="status" label="状态">
+        <!-- <el-table-column prop="status" label="状态">
+          <template #default="scope"> </template>
+        </el-table-column> -->
+        <el-table-column label="状态">
           <template #default="scope">
-            <span>{{ statusLabel(scope.row.status) }}</span>
+            <el-progress
+              v-if="scope.row.status === 1"
+              :percentage="progressLabel(scope.row.progress, scope.row.total)"
+            />
+            <span v-else>
+              {{ statusLabel(scope.row.status) }}
+            </span>
+            <!-- <el-progress :percentage="progressLabel(4, 7)" /> -->
           </template>
         </el-table-column>
-        <el-table-column prop="progress" label="进度"></el-table-column>
         <el-table-column prop="create_at" label="创建时间" show-overflow-tooltip></el-table-column>
         <el-table-column prop="op" label="操作" fixed="right">
           <template #default="scope">
             <el-space>
               <el-button type="primary" size="small">详情</el-button>
-              <el-button type="success" size="small">启动</el-button>
+              <el-button
+                v-if="scope.row.status === 0"
+                type="success"
+                size="small"
+                @click="startTask(scope.row.id)"
+              >
+                启动
+              </el-button>
             </el-space>
           </template>
         </el-table-column>
@@ -131,14 +223,32 @@ onMounted(() => {
       <div v-if="selectedType == 1" style="margin-top: 12px">
         <div>
           <el-space>
-            <span>输入频道数量: </span>
-            <el-input v-model="channelCount" type="number" placeholder="输入需要创建的频道数量" />
+            <span>任务名称</span>
+            <el-input v-model="taskTitle" />
+          </el-space>
+        </div>
+        <div>
+          <el-space>
+            <span>频道数量</span>
+            <el-input v-model="channelCount" type="number" />
           </el-space>
         </div>
         <div style="margin-top: 12px">
           <el-space>
-            <span>选择频道语言: </span>
-            <el-select v-model="selectedLang" placeholder="选择语言">
+            <span>频道名称</span>
+            <el-input v-model="channelTitle" />
+          </el-space>
+        </div>
+        <div style="margin-top: 12px">
+          <el-space>
+            <span>机器人名称</span>
+            <el-input v-model="botUsername" placeholder="@botusername" />
+          </el-space>
+        </div>
+        <div style="margin-top: 12px">
+          <el-space>
+            <span>频道语言</span>
+            <el-select style="width: 180px" v-model="selectedLang" placeholder="选择语言">
               <el-option
                 v-for="item in languages"
                 :key="item.value"
@@ -150,8 +260,10 @@ onMounted(() => {
         </div>
       </div>
       <template #footer>
-        <el-button @click="dialogVisible = false">返回</el-button>
-        <el-button type="primary">创建任务</el-button>
+        <el-button @click="dialogVisible = false"> 返回 </el-button>
+        <el-button v-if="selectedType !== null" type="primary" @click="createTask()">
+          创建任务
+        </el-button>
       </template>
     </el-dialog>
   </div>
