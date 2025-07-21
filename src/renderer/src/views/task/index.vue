@@ -80,6 +80,21 @@ const channelCount = ref(1)
 const channelTitle = ref('Channel')
 const botUsername = ref('')
 const selectedLang = ref(null)
+const selectedBot = ref('')
+const bots = ref([])
+
+const getBots = async () => {
+    try {
+        const result = await api.get('/bots')
+        if (result.code === 200) {
+            bots.value = result.data.bots
+        } else {
+            ElMessage.error(result.message)
+        }
+    } catch (error) {
+        ElMessage.error(error)
+    }
+}
 
 const sessions_dir = ref('')
 
@@ -109,7 +124,7 @@ const createTask = async () => {
     if (selectedType.value === 0) {
         args = [sessions_dir.value]
     } else if (selectedType.value === 1) {
-        args = [channelCount.value, selectedLang.value, channelTitle.value, botUsername.value]
+        args = [channelCount.value, selectedLang.value, channelTitle.value, selectedBot.value]
     }
 
     const willCheck = [taskTitle.value, ...args]
@@ -159,6 +174,11 @@ const viewTaskResult = (result) => {
     taskResultDialogVisible.value = true
 }
 
+const onCreateTask = async () => {
+    dialogVisible.value = true
+    await getBots()
+}
+
 const refresh = async () => {
     interval = setInterval(async () => {
         await getTasks()
@@ -179,7 +199,7 @@ onUnmounted(() => {
     <div>
         <div>
             <el-space>
-                <el-button type="primary" @click="dialogVisible = true">创建任务</el-button>
+                <el-button type="primary" @click="onCreateTask()">创建任务</el-button>
             </el-space>
         </div>
         <div style="margin-top: 12px">
@@ -201,7 +221,6 @@ onUnmounted(() => {
                         <span v-else>
                             {{ statusLabel(scope.row.status) }}
                         </span>
-                        <!-- <el-progress :percentage="progressLabel(4, 7)" /> -->
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -216,8 +235,9 @@ onUnmounted(() => {
                                 @click="viewTaskResult(scope.row.result)"
                                 type="primary"
                                 size="small"
-                                >详情</el-button
                             >
+                                详情
+                            </el-button>
                             <el-button
                                 v-if="scope.row.status === 0"
                                 type="success"
@@ -274,25 +294,31 @@ onUnmounted(() => {
                 </div>
 
                 <div class="arg">
-                    <div class="arg-label"><span>机器人名称</span></div>
-                    <el-input v-model="botUsername" placeholder="@botusername" class="arg-value" />
+                    <div class="arg-label"><span>管理员</span></div>
+                    <div class="arg-value">
+                        <el-select v-model="selectedBot" placeholder="选择机器人作为管理员">
+                            <el-option
+                                v-for="item in bots"
+                                :key="item.username"
+                                :label="item.username"
+                                :value="item.username"
+                            />
+                        </el-select>
+                    </div>
                 </div>
 
                 <div class="arg">
                     <div class="arg-label"><span>频道语言</span></div>
-                    <el-select
-                        style="width: 180px"
-                        v-model="selectedLang"
-                        placeholder="选择语言"
-                        class="arg-value"
-                    >
-                        <el-option
-                            v-for="item in languages"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        />
-                    </el-select>
+                    <div class="arg-value">
+                        <el-select v-model="selectedLang" placeholder="选择语言">
+                            <el-option
+                                v-for="item in languages"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            />
+                        </el-select>
+                    </div>
                 </div>
             </div>
 
