@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { api } from '../../api/http'
 
 const dialogVisible = ref(false)
@@ -15,7 +15,7 @@ const taskTypes = ref([
 ])
 
 const tasks = ref([])
-async function getTasks(page = 1, size = 10, status = null) {
+const getTasks = async (page = 1, size = 10, status = null) => {
   try {
     const res = await api.get(`/tasks?page=1&size=10`)
     tasks.value = res.data.tasks
@@ -24,19 +24,7 @@ async function getTasks(page = 1, size = 10, status = null) {
   }
 }
 
-async function getRunningTasksCount() {
-  try {
-    const result = await api.get(`/tasks?status=1`)
-    if (result.code == 200) {
-      return result.data.count
-    }
-  } catch (error) {
-    console.error(error)
-  }
-  return 0
-}
-
-function statusLabel(value) {
+const statusLabel = (value) => {
   switch (value) {
     case 0:
       return '待执行'
@@ -49,7 +37,7 @@ function statusLabel(value) {
   }
 }
 
-function typeLabel(value) {
+const typeLabel = (value) => {
   switch (value) {
     case 0:
       return '导入账号'
@@ -58,7 +46,7 @@ function typeLabel(value) {
   }
 }
 
-function progressLabel(progress, total) {
+const progressLabel = (progress, total) => {
   return Math.round((progress / total) * 100 * 100) / 100
 }
 
@@ -95,7 +83,28 @@ const selectedLang = ref(null)
 
 const sessions_dir = ref('')
 
-async function createTask() {
+const selectSessionsDir = async () => {
+  const options = {
+    title: '请选择账号文件夹',
+    buttonLabel: '选择此文件夹',
+    properties: ['openDirectory']
+  }
+
+  const result = await window.electronAPI.selectPath(options)
+  console.log(result)
+  if (result) {
+    sessions_dir.value = result
+  }
+}
+
+const intChannelCount = computed({
+  get: () => channelCount.value,
+  set: (val) => {
+    channelCount.value = parseInt(val) || 0
+  }
+})
+
+const createTask = async () => {
   let args = []
   if (selectedType.value === 0) {
     args = [sessions_dir.value]
@@ -130,7 +139,7 @@ async function createTask() {
   }
 }
 
-async function startTask(taskId) {
+const startTask = async (taskId) => {
   try {
     const result = await api.post(`/tasks/start/${taskId}`)
     if (result.code === 200) {
@@ -143,12 +152,22 @@ async function startTask(taskId) {
   }
 }
 
-let interval = null
-onMounted(() => {
-  getTasks()
+const taskResultDialogVisible = ref(false)
+const taskResult = ref('')
+const viewTaskResult = (result) => {
+  taskResult.value = result
+  taskResultDialogVisible.value = true
+}
+
+const refresh = async () => {
   interval = setInterval(async () => {
     await getTasks()
   }, 1000)
+}
+
+let interval = null
+onMounted(async () => {
+  await refresh()
 })
 
 onUnmounted(() => {
@@ -173,9 +192,6 @@ onUnmounted(() => {
           </template>
         </el-table-column>
         <el-table-column prop="args" label="参数" show-overflow-tooltip></el-table-column>
-        <!-- <el-table-column prop="status" label="状态">
-          <template #default="scope"> </template>
-        </el-table-column> -->
         <el-table-column label="状态">
           <template #default="scope">
             <el-progress
@@ -192,7 +208,9 @@ onUnmounted(() => {
         <el-table-column prop="op" label="操作" fixed="right">
           <template #default="scope">
             <el-space>
-              <el-button type="primary" size="small">详情</el-button>
+              <el-button @click="viewTaskResult(scope.row.result)" type="primary" size="small"
+                >详情</el-button
+              >
               <el-button
                 v-if="scope.row.status === 0"
                 type="success"
@@ -215,50 +233,62 @@ onUnmounted(() => {
           :value="item.value"
         />
       </el-select>
-      <div v-if="selectedType == 0" style="margin-top: 12px">
-        <el-space>
-          <el-input placeholder="选择账号目录" :disabled="true" />
-        </el-space>
-      </div>
-      <div v-if="selectedType == 1" style="margin-top: 12px">
-        <div>
-          <el-space>
-            <span>任务名称</span>
-            <el-input v-model="taskTitle" />
-          </el-space>
+
+      <div v-if="selectedType !== null" class="arg">
+        <div class="arg-label">
+          <span>任务名称</span>
         </div>
-        <div>
-          <el-space>
+        <el-input class="arg-value" v-model="taskTitle" aria-label="任务名称" />
+      </div>
+
+      <div v-if="selectedType == 0" class="arg">
+        <el-input
+          v-model="sessions_dir"
+          style="cursor: pointer"
+          @click="selectSessionsDir()"
+          placeholder="选择账号目录"
+          readonly
+        />
+      </div>
+
+      <div v-if="selectedType == 1">
+        <div class="arg">
+          <div class="arg-label">
             <span>频道数量</span>
-            <el-input v-model="channelCount" type="number" />
-          </el-space>
+          </div>
+          <el-input v-model="intChannelCount" type="number" class="arg-value" />
         </div>
-        <div style="margin-top: 12px">
-          <el-space>
+
+        <div class="arg">
+          <div class="arg-label">
             <span>频道名称</span>
-            <el-input v-model="channelTitle" />
-          </el-space>
+          </div>
+          <el-input v-model="channelTitle" class="arg-value" />
         </div>
-        <div style="margin-top: 12px">
-          <el-space>
-            <span>机器人名称</span>
-            <el-input v-model="botUsername" placeholder="@botusername" />
-          </el-space>
+
+        <div class="arg">
+          <div class="arg-label"><span>机器人名称</span></div>
+          <el-input v-model="botUsername" placeholder="@botusername" class="arg-value" />
         </div>
-        <div style="margin-top: 12px">
-          <el-space>
-            <span>频道语言</span>
-            <el-select style="width: 180px" v-model="selectedLang" placeholder="选择语言">
-              <el-option
-                v-for="item in languages"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-space>
+
+        <div class="arg">
+          <div class="arg-label"><span>频道语言</span></div>
+          <el-select
+            style="width: 180px"
+            v-model="selectedLang"
+            placeholder="选择语言"
+            class="arg-value"
+          >
+            <el-option
+              v-for="item in languages"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </div>
       </div>
+
       <template #footer>
         <el-button @click="dialogVisible = false"> 返回 </el-button>
         <el-button v-if="selectedType !== null" type="primary" @click="createTask()">
@@ -266,5 +296,32 @@ onUnmounted(() => {
         </el-button>
       </template>
     </el-dialog>
+    <el-dialog v-model="taskResultDialogVisible" title="任务详情">
+      <p>
+        {{ taskResult }}
+      </p>
+    </el-dialog>
   </div>
 </template>
+
+<style scoped>
+.el-space {
+  width: 100%;
+}
+
+.arg {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.arg-label {
+  flex: 2;
+  display: flex;
+  align-items: center;
+}
+.arg-value {
+  flex: 8;
+}
+</style>
