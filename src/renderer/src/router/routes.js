@@ -3,7 +3,8 @@ import Account from '../views/account/index.vue'
 // import Link from '../views/link/index.vue'
 import Channel from '../views/channel/index.vue'
 import Task from '../views/task/index.vue'
-
+import Bot from '../views/bot/index.vue'
+import Setting from '../views/setting/index.vue'
 
 const routes = [
   {
@@ -36,6 +37,22 @@ const routes = [
     component: Task,
     meta: {
         title: '任务管理'
+    }
+  },
+  {
+    path: '/bot',
+    name: 'bot',
+    component: Bot,
+    meta: {
+        title: '机器人管理'
+    }
+  },
+  {
+    path: '/setting',
+    name: 'setting',
+    component: Setting,
+    meta: {
+        title: '系统设置'
     }
   },
 ]
