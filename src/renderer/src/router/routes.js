@@ -3,7 +3,6 @@ import Account from '../views/account/index.vue'
 import Channel from '../views/channel/index.vue'
 import Task from '../views/task/index.vue'
 import Bot from '../views/bot/index.vue'
-import Scheduler from '../views/scheduler/index.vue'
 import Setting from '../views/setting/index.vue'
 
 const routes = [
@@ -45,14 +44,6 @@ const routes = [
     component: Bot,
     meta: {
         title: '机器人管理'
-    }
-  },
-  {
-    path: '/scheduler',
-    name: 'scheduler',
-    component: Scheduler,
-    meta: {
-        title: '批量发送消息'
     }
   },
   {
