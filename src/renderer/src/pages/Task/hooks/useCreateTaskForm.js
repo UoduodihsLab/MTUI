@@ -2,10 +2,12 @@ import { useState, useMemo } from 'react'
 import { Form } from 'antd'
 import AccountArgsForm from '../components/TaskForms/AccountArgsForm'
 import ChannelArgsForm from '../components/TaskForms/ChannelArgsForm'
+import PostArgsForm from '../components/TaskForms/PostArgsForm'
 
 const componentMap = {
     account: AccountArgsForm,
     channel: ChannelArgsForm,
+    post: PostArgsForm
 }
 
 const taskTypes = [
