@@ -17,6 +17,10 @@ function CustomLayout() {
             label: '主页'
         },
         {
+            key: '/bot',
+            label: '机器人管理'
+        },
+        {
             key: '/task',
             label: '任务管理'
         }

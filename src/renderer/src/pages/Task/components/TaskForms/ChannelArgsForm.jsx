@@ -63,7 +63,7 @@ export default function ChannelArgsForm() {
 
             <Form.Item
                 label="机器人"
-                name={['args', 1]}
+                name={['args', 3]}
                 rules={[{ required: true, message: '必须选择一个机器人作为频道管理员' }]}
             >
                 <Select options={bots} placeholder="选择机器人作为频道管理员" allowClear />
