@@ -13,7 +13,9 @@ const columns = [
         key: 'x',
         render: () => (
             <Space>
-                <Button type="primary">修改</Button>
+                <Button type="primary" size="small">
+                    修改
+                </Button>
             </Space>
         )
     }

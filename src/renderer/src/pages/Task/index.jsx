@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Space, Button, Modal } from 'antd'
 
-import PageView from '../../components/PageView'
-import useTModal from '../../hooks/useTModal'
-import TaskTable from './table/TaskTable'
+import PageView from '@renderer/components/PageView'
+import useTModal from '@renderer/hooks/useTModal'
+import TaskTable from '@renderer/pages/Task/components/table/TaskTable'
 
 import CreateTaskForm from './components/TaskForms/CreateTaskForm'
 

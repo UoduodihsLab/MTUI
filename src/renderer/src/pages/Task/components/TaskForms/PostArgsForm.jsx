@@ -33,7 +33,7 @@ export default function PostArgsForm() {
                 name={['args', 0]}
                 rules={[{ required: true, message: '请至少选择一个频道' }]}
             >
-                <Select options={channels} placeholder="请选择需要发布内容的频道" />
+                <Select mode='multiple' options={channels} placeholder="请选择需要发布内容的频道" />
             </Form.Item>
             <Form.Item
                 label="内容数量"

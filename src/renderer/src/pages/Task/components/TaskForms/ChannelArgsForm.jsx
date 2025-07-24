@@ -10,7 +10,7 @@ export default function ChannelArgsForm() {
 
     async function getLanguages() {
         try {
-            const result = await api.get('/languages')
+            const result = await api.get('/langs')
             if (result.code === 200) {
                 const data = result.data.map((item) => ({ label: item.title, value: item.code }))
                 setLanguages(data)

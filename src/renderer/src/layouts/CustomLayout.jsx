@@ -17,13 +17,25 @@ function CustomLayout() {
             label: '主页'
         },
         {
+            key: '/account',
+            label: '账号管理'
+        },
+        {
+            key: '/channel',
+            label: '频道管理'
+        },
+        {
             key: '/bot',
             label: '机器人管理'
         },
         {
             key: '/task',
             label: '任务管理'
-        }
+        },
+        {
+            key: '/lang',
+            label: '语言管理'
+        },
     ]
 
     const navigate = useNavigate()
