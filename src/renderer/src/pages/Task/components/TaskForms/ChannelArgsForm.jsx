@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Form, Input, InputNumber, Select, message } from 'antd'
+import { Form, Input, InputNumber, Select } from 'antd'
 import api from '../../../../api/http'
+
+import { messageApi } from '../../../../utils/MessageHolder'
 
 export default function ChannelArgsForm() {
     const [languages, setLanguages] = useState([])
@@ -14,7 +16,7 @@ export default function ChannelArgsForm() {
                 setLanguages(data)
             }
         } catch (error) {
-            message.error('获取语言列表失败')
+            messageApi.error('获取语言列表失败')
         }
     }
 
@@ -26,7 +28,7 @@ export default function ChannelArgsForm() {
                 setBots(data)
             }
         } catch (error) {
-            message.error('获取机器人列表失败')
+            messageApi.error('获取机器人列表失败')
         }
     }
 

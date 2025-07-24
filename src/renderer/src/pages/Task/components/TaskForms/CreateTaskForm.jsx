@@ -1,11 +1,26 @@
 import { Form, Input, Select, Button } from 'antd'
 import useCreateTaskForm from '../../hooks/useCreateTaskForm'
+import api from '../../../../api/http'
+
+import { messageApi } from '../../../../utils/MessageHolder'
 
 export default function CreateTaskForm() {
     const { taskTypes, form, DynamicFormComponent, handleTypeChange } = useCreateTaskForm()
 
-    function onFinish(values) {
+    async function onFinish(values) {
         console.log(values)
+
+        try {
+            const result = await api.post('/tasks', values)
+
+            if (result.code === 201) {
+                messageApi.success(result.message)
+            } else {
+                messageApi.error(result.message)
+            }
+        } catch (error) {
+            messageApi.error(error)
+        }
     }
 
     return (
@@ -31,7 +46,7 @@ export default function CreateTaskForm() {
                 <Input placeholder="输入任务名称" />
             </Form.Item>
 
-            {DynamicFormComponent && <DynamicFormComponent />}
+            {DynamicFormComponent && <DynamicFormComponent form={form} />}
 
             <Form.Item>
                 <Button type="primary" htmlType="submit">

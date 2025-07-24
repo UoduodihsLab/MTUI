@@ -1,6 +1,25 @@
+import { useState } from 'react'
 import { Form, Input } from 'antd'
+import useCreateTaskForm from '../../hooks/useCreateTaskForm'
 
-export default function AccountArgs() {
+export default function AccountArgs({ form }) {
+    async function selectSessionsDir() {
+        const options = {
+            title: '选择账号目录',
+            buttonLabel: '选择此目录',
+            properties: ['openDirectory']
+        }
+
+        const result = await window.electronAPI.selectPath(options)
+
+        console.log(result)
+        if (result) {
+            form.setFieldsValue({
+                args: [result]
+            })
+        }
+    }
+
     return (
         <>
             <Form.Item
@@ -8,7 +27,12 @@ export default function AccountArgs() {
                 name={['args', 0]}
                 rules={[{ required: true, message: '账号目录不能为空' }]}
             >
-                <Input placeholder="请选择账号目录" />
+                <Input
+                    onClick={selectSessionsDir}
+                    className="cursor-pointer"
+                    placeholder="请选择账号目录"
+                    readOnly
+                />
             </Form.Item>
         </>
     )

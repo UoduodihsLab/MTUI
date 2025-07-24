@@ -4,6 +4,8 @@ import TaskStatus from './TaskStatus'
 
 import api from '../../../api/http'
 
+import { messageApi } from '../../../utils/MessageHolder'
+
 const columns = [
     { title: '编号', dataIndex: 'id', key: 'id' },
     { title: '名称', dataIndex: 'title', key: 'title' },
@@ -53,5 +55,5 @@ export default function TaskTable() {
     useEffect(() => {
         getTasks()
     }, [])
-    return <Table columns={columns} dataSource={tasks} />
+    return <Table columns={columns} dataSource={tasks} rowKey="id" bordered />
 }

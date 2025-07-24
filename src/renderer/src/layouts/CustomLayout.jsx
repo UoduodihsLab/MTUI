@@ -1,10 +1,16 @@
-import {useNavigate, Outlet } from 'react-router'
-import { Layout } from 'antd'
-import { Menu } from 'antd'
+import { useNavigate, Outlet } from 'react-router'
+import { ConfigProvider, Layout } from 'antd'
+import { Menu, message } from 'antd'
+
+import { setMessageApi } from '../utils/MessageHolder'
 
 const { Sider, Content } = Layout
 
 function CustomLayout() {
+    const [staticMessageApi, contextHolder] = message.useMessage()
+
+    setMessageApi(staticMessageApi)
+
     const items = [
         {
             key: '/home',
@@ -23,14 +29,17 @@ function CustomLayout() {
     }
 
     return (
-        <Layout className="h-full">
-            <Sider style={{background: '#fff'}}>
-                <Menu items={items} onClick={onClickItem} />
-            </Sider>
-            <Content>
-                <Outlet />
-            </Content>
-        </Layout>
+        <ConfigProvider>
+            {contextHolder}
+            <Layout className="h-full">
+                <Sider style={{ background: '#fff' }}>
+                    <Menu items={items} onClick={onClickItem} />
+                </Sider>
+                <Content>
+                    <Outlet />
+                </Content>
+            </Layout>
+        </ConfigProvider>
     )
 }
 
