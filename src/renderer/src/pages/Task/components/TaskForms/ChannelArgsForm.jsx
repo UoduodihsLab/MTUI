@@ -12,7 +12,7 @@ export default function ChannelArgsForm() {
         try {
             const result = await api.get('/langs')
             if (result.code === 200) {
-                const data = result.data.map((item) => ({ label: item.title, value: item.code }))
+                const data = result.data.map((item) => ({ label: item.title, value: item.title }))
                 setLanguages(data)
             }
         } catch (error) {
