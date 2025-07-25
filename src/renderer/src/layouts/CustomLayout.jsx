@@ -57,16 +57,21 @@ function CustomLayout() {
                         <Menu items={items} onClick={onClickItem} />
                     </Sider>
                     <Layout>
-                        <Header>
-                            <Button type="primary" onClick={updaterModal.openModal}>
-                                检查更新
-                            </Button>
+                        <Header
+                            style={{ background: '#fff' }}
+                            className="flex justify-end items-center"
+                        >
+                            <div>
+                                <Button type="primary" onClick={updaterModal.openModal}>
+                                    检查更新
+                                </Button>
+                            </div>
                         </Header>
                         <Content>
                             <Outlet />
                         </Content>
                     </Layout>
-                    <Modal title="检查更新" {...updaterModal.modalProps}>
+                    <Modal title='更新' {...updaterModal.modalProps} footer={null}>
                         <MTUpdater />
                     </Modal>
                 </Layout>

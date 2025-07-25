@@ -11,7 +11,7 @@ app.whenReady().then(() => {
     setupIPCHandlers()
 
     if (import.meta.env.PROD) {
-        startCore
+        startCore()
     }
 
     electronApp.setAppUserModelId('com.uoduodihs.mtdesktop')
