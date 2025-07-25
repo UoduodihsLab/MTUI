@@ -1,5 +1,5 @@
 {
-  "name": "mtui",
+  "name": "MTDesktop",
   "version": "0.0.1",
   "description": "A multi-functional Telegram Desktop-App",
   "main": "./out/main/index.js",
