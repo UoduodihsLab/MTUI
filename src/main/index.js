@@ -1,8 +1,6 @@
 import { app, shell, BrowserWindow, ipcMain, dialog, autoUpdater } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import path from ''
-import { spawn, ChildProcess } from 'child_process'
 
 import icon from '../../resources/icon.png?asset'
 
