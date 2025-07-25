@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Table, Space, Button } from 'antd'
 import TaskStatus from './TaskStatus'
 import ActionColumn from './ActionColumn'
+import TaskProgress from './TaskProgress'
 import { localFTime } from '@renderer/utils/tools'
-import api from '@renderer/api/http'
 
-export default function TaskTable() {
+export default function TaskTable({ tasks, updateTasks }) {
     const columns = [
         { title: '编号', dataIndex: 'id', key: 'id' },
         { title: '名称', dataIndex: 'title', key: 'title' },
@@ -18,6 +18,12 @@ export default function TaskTable() {
             render: (status) => <TaskStatus status={status} />
         },
         {
+            title: '进度',
+            dataIndex: 'progress',
+            key: 'progress',
+            render: (_, record) => <TaskProgress record={record} />
+        },
+        {
             title: '创建时间',
             dataIndex: 'create_at',
             key: 'create_at',
@@ -28,25 +34,9 @@ export default function TaskTable() {
             title: '操作',
             dataIndex: 'x',
             key: 'x',
-            render: (_, record) => <ActionColumn record={record} />
+            render: (_, record) => <ActionColumn record={record} updateTasks={updateTasks} />
         }
     ]
 
-    const [tasks, setTasks] = useState([])
-
-    async function getTasks(page = 1, size = 10) {
-        try {
-            const result = await api.get(`/tasks`)
-            if (result.code === 200) {
-                setTasks(result.data.tasks)
-            }
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
-    useEffect(() => {
-        getTasks()
-    }, [])
     return <Table columns={columns} dataSource={tasks} rowKey="id" bordered />
 }

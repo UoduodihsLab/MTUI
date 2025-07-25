@@ -4,7 +4,7 @@ import api from '../../../../api/http'
 
 import { messageApi } from '../../../../utils/MessageHolder'
 
-export default function CreateTaskForm() {
+export default function CreateTaskForm({ updateTasks }) {
     const { taskTypes, form, DynamicFormComponent, handleTypeChange } = useCreateTaskForm()
 
     async function onFinish(values) {
@@ -15,6 +15,7 @@ export default function CreateTaskForm() {
 
             if (result.code === 201) {
                 messageApi.success(result.message)
+                updateTasks()
             } else {
                 messageApi.error(result.message)
             }

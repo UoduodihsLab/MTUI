@@ -2,12 +2,13 @@ import { Space, Button } from 'antd'
 import taskApi from '@renderer/api/task'
 import { messageApi } from '@renderer/utils/MessageHolder'
 
-export default function ActionColumn({ record }) {
+export default function ActionColumn({ record, updateTasks }) {
     async function handleStartTask() {
         try {
             const res = await taskApi.startTask(record.id)
             if (res.code === 200) {
                 messageApi.success(res.message)
+                updateTasks()
             } else {
                 messageApi.error(res.message)
             }

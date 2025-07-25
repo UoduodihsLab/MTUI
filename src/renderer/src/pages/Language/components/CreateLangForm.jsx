@@ -1,6 +1,6 @@
 import { Form, Input, Button } from 'antd'
-import api from '../../../api/http'
-import { messageApi } from '../../../utils/MessageHolder'
+import api from '@renderer/api/http'
+import { messageApi } from '@renderer/utils/MessageHolder'
 
 export default function CreateLangForm() {
     const [form] = Form.useForm()
@@ -8,7 +8,7 @@ export default function CreateLangForm() {
     async function onFinish(values) {
         console.log(values)
         try {
-            const result = await api.post('/languages', values)
+            const result = await api.post('/langs', values)
             if (result.code === 201) {
                 messageApi.success(result.message)
             } else {
