@@ -15,7 +15,6 @@ app.whenReady().then(async () => {
     if (import.meta.env.PROD) {
         const userDatabasePath = await ensureDatabaseExists()
         coreProcess = startCore(userDatabasePath)
-        startCore()
     }
 
     electronApp.setAppUserModelId('com.uoduodihs.mtdesktop')
