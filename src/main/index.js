@@ -1,7 +1,8 @@
-import { app, shell, BrowserWindow, ipcMain, dialog} from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { autoUpdater } from 'electron-updater'
+import startCore from './core'
 
 import icon from '../../resources/icon.png?asset'
 
@@ -92,6 +93,7 @@ app.whenReady().then(() => {
     })
 
     createWindow()
+    startCore()
 
     app.on('activate', function () {
         // On macOS it's common to re-create a window in the app when the

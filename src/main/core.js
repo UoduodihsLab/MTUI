@@ -6,7 +6,7 @@ import { spawn } from 'child_process'
 
 let coreProcess = null
 
-function createCoreProcess() {
+export function startCore() {
     const coreExcutableName = 'MTCore.exe'
     const coreFolder = 'core'
 
