@@ -47,7 +47,10 @@ export function startCore(dbPath) {
 
     console.log('正在启动 core...')
 
-    coreProcess = spawn(coreExcutablePath, [dbPath])
+    coreProcess = spawn(coreExcutablePath, [], {
+        ...process.env,
+        DATABASE_PATH: dbPath
+    })
 
     coreProcess.stdout.on('data', (data) => {
         console.log(`[MTCore STDOUT]: ${data.toString()}`)
