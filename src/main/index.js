@@ -1,6 +1,7 @@
-import { app, shell, BrowserWindow, ipcMain, dialog, autoUpdater } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog} from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { autoUpdater } from 'electron-updater'
 
 import icon from '../../resources/icon.png?asset'
 
