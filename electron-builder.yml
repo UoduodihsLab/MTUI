@@ -44,7 +44,7 @@ publish:
   provider: github
   owner: uoduodihsLab
   repo: https://github.com/UoduodihsLab/MTUI
-  release: 'release'
+  release: release
   # url: https://example.com/auto-updates
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
