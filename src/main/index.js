@@ -1,6 +1,9 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog, autoUpdater } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import path from ''
+import { spawn, ChildProcess } from 'child_process'
+
 import icon from '../../resources/icon.png?asset'
 
 function createWindow() {
@@ -19,6 +22,10 @@ function createWindow() {
 
     mainWindow.on('ready-to-show', () => {
         mainWindow.show()
+
+        if (import.meta.env.PROD) {
+            autoUpdater.checkForUpdatesAndNotify()
+        }
     })
 
     mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -33,6 +40,33 @@ function createWindow() {
     } else {
         mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
     }
+}
+
+if (import.meta.env.PROD) {
+    autoUpdater.on('update-available', (info) => {
+        console.log('发现可用更新: ', info)
+    })
+
+    autoUpdater.on('update-downloaded', (info) => {
+        console.log('更新下载完成', info)
+
+        dialog
+            .showMessageBox({
+                type: 'info',
+                buttons: ['重启安装', '稍后'],
+                title: '应用更新',
+                message: '新版本已下载, 重启应用即可完成安装'
+            })
+            .then((res) => {
+                if (result.response === 0) {
+                    autoUpdater.quitAndInstall()
+                }
+            })
+    })
+
+    autoUpdater.on('error', (err) => {
+        console.log('更新出错', err)
+    })
 }
 
 // This method will be called when Electron has finished

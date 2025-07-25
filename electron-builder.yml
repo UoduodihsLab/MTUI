@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: mtui
+appId: com.uoduodihs.mtdesktop
+productName: MTDesktop
 directories:
   buildResources: build
 files:
@@ -11,12 +11,15 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: mtui
+  executableName: MTDesktop
 nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+  createStartMenuShortcut: true
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
@@ -38,7 +41,13 @@ appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: github
+  owner: uoduodihsLab
+  repo: https://github.com/UoduodihsLab/MTUI
+  # url: https://example.com/auto-updates
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
+
+extraResources:
+  from: ./extra/core
+  to: core
