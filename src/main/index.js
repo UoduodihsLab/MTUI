@@ -3,14 +3,18 @@ import { electronApp, optimizer } from '@electron-toolkit/utils'
 import windowManager from './app-window'
 import log from 'electron-log'
 import setupIPCHandlers from './ipc-handlers'
-import startCore from './core'
+import { ensureDatabaseExists, startCore } from './core'
 
-app.whenReady().then(() => {
+let coreProcess = null
+
+app.whenReady().then(async () => {
     const mainWindow = windowManager.createWindow()
 
     setupIPCHandlers()
 
     if (import.meta.env.PROD) {
+        const userDatabasePath = await ensureDatabaseExists()
+        coreProcess = startCore(userDatabasePath)
         startCore()
     }
 
@@ -28,5 +32,11 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit()
+    }
+})
+
+app.on('will-quit', () => {
+    if (coreProcess) {
+        coreProcess.kill()
     }
 })
