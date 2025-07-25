@@ -1,13 +1,9 @@
 import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import {is} from '@electron-toolkit/utils'
 import windowManager from './app-window'
+import log from 'electron-log'
 import setupIPCHandlers from './ipc-handlers'
 import startCore from './core'
-
-if (is.dev){
-    app.setAppUserModelId('com.uoduodihs.mtdesktop')
-}
 
 app.whenReady().then(() => {
     const mainWindow = windowManager.createWindow()
@@ -18,7 +14,7 @@ app.whenReady().then(() => {
         startCore
     }
 
-    electronApp.setAppUserModelId('com.electron')
+    electronApp.setAppUserModelId('com.uoduodihs.mtdesktop')
 
     app.on('browser-window-created', (_, window) => {
         optimizer.watchWindowShortcuts(window)
