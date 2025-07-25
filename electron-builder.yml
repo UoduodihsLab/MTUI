@@ -43,7 +43,7 @@ npmRebuild: false
 publish:
   provider: github
   owner: uoduodihsLab
-  repo: https://github.com/UoduodihsLab/MTUI
+  repo: MTUI
   release: release
   # url: https://example.com/auto-updates
 electronDownload:
