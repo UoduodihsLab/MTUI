@@ -1,7 +1,10 @@
+import { is } from '@electron-toolkit/utils'
 import { autoUpdater } from 'electron-updater'
 import { getMainWindow } from './app-window'
 
-// autoUpdater.forceDevUpdateConfig = true
+if (is.dev) {
+    autoUpdater.forceDevUpdateConfig = true
+}
 autoUpdater.autoDownload = false
 
 function sendUpdateMessage(channel, payload) {

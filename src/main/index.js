@@ -1,9 +1,13 @@
 import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-
+import {is} from '@electron-toolkit/utils'
 import windowManager from './app-window'
 import setupIPCHandlers from './ipc-handlers'
 import startCore from './core'
+
+if (is.dev){
+    app.setAppUserModelId('com.uoduodihs.mtdesktop')
+}
 
 app.whenReady().then(() => {
     const mainWindow = windowManager.createWindow()

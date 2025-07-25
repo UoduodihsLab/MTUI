@@ -20,10 +20,6 @@ function createWindow() {
 
     mainWindow.on('ready-to-show', () => {
         mainWindow.show()
-
-        if (import.meta.env.PROD) {
-            autoUpdater.checkForUpdatesAndNotify()
-        }
     })
 
     mainWindow.webContents.setWindowOpenHandler((details) => {
