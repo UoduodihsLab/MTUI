@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router'
+import { createHashRouter } from 'react-router'
 
 import CustomLayout from '../layouts/CustomLayout'
 import Home from '../pages/Home'
@@ -8,7 +8,7 @@ import Account from '../pages/Account'
 import Channel from '../pages/Channel'
 import Lang from '../pages/Language'
 
-const router = createBrowserRouter([
+const router = createHashRouter([
     {
         path: '/',
         Component: CustomLayout,

@@ -37,7 +37,7 @@ export default function Channel() {
                 setChannels(data)
             }
         } catch (error) {
-            messageApi.error(error)
+            console.error(error)
         }
     }
 
