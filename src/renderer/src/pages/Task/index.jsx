@@ -60,8 +60,8 @@ function Task() {
             </div>
 
             <div>
-                <Modal title="创建任务" {...createModal.modalProps}>
-                    <CreateTaskForm updateTasks={updateTasks} />
+                <Modal title="创建任务" footer={null} {...createModal.modalProps}>
+                    <CreateTaskForm updateTasks={updateTasks} closeModal={createModal.closeModal} />
                 </Modal>
             </div>
         </PageView>

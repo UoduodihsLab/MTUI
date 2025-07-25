@@ -31,6 +31,9 @@ app.whenReady().then(async () => {
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
+        if (coreProcess) {
+            coreProcess.kill()
+        }
         app.quit()
     }
 })

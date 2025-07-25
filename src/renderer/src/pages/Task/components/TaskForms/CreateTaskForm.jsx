@@ -4,18 +4,17 @@ import api from '../../../../api/http'
 
 import { messageApi } from '../../../../utils/MessageHolder'
 
-export default function CreateTaskForm({ updateTasks }) {
+export default function CreateTaskForm({ updateTasks, closeModal }) {
     const { taskTypes, form, DynamicFormComponent, handleTypeChange } = useCreateTaskForm()
 
     async function onFinish(values) {
-        console.log(values)
-
         try {
             const result = await api.post('/tasks', values)
 
             if (result.code === 201) {
                 messageApi.success(result.message)
                 updateTasks()
+                closeModal()
             } else {
                 messageApi.error(result.message)
             }
@@ -50,9 +49,11 @@ export default function CreateTaskForm({ updateTasks }) {
             {DynamicFormComponent && <DynamicFormComponent form={form} />}
 
             <Form.Item>
-                <Button type="primary" htmlType="submit">
-                    提交
-                </Button>
+                <div className="flex justify-end">
+                    <Button type="primary" htmlType="submit">
+                        提交
+                    </Button>
+                </div>
             </Form.Item>
         </Form>
     )

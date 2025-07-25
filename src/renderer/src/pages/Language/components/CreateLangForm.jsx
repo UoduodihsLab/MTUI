@@ -2,7 +2,7 @@ import { Form, Input, Button } from 'antd'
 import api from '@renderer/api/http'
 import { messageApi } from '@renderer/utils/MessageHolder'
 
-export default function CreateLangForm() {
+export default function CreateLangForm({ closeModal, updateLangs }) {
     const [form] = Form.useForm()
 
     async function onFinish(values) {
@@ -11,6 +11,8 @@ export default function CreateLangForm() {
             const result = await api.post('/langs', values)
             if (result.code === 201) {
                 messageApi.success(result.message)
+                updateLangs()
+                closeModal()
             } else {
                 messageApi.error(result.message)
             }
@@ -37,9 +39,11 @@ export default function CreateLangForm() {
                     <Input placeholder="请输入语言代码" />
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        添加
-                    </Button>
+                    <div className="flex justify-end">
+                        <Button type="primary" htmlType="submit">
+                            添加
+                        </Button>
+                    </div>
                 </Form.Item>
             </Form>
         </>

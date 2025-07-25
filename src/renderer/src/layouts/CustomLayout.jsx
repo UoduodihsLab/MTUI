@@ -16,10 +16,10 @@ function CustomLayout() {
     const updaterModal = useTModal()
 
     const items = [
-        {
-            key: '/home',
-            label: '主页'
-        },
+        // {
+        //     key: '/home',
+        //     label: '主页'
+        // },
         {
             key: '/account',
             label: '账号管理'

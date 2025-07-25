@@ -21,25 +21,7 @@ const columns = [
     }
 ]
 
-export default function BotTable() {
-    const [bots, setBots] = useState([])
-
-    async function getBots(page = 1, size = 10) {
-        try {
-            const result = await api.get(`/bots?page=1&size=10`)
-            if (result.code === 200) {
-                const data = result.data.bots
-                setBots(data)
-            }
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
-    useEffect(() => {
-        getBots()
-    }, [])
-
+export default function BotTable({bots}) {
     return (
         <>
             <Table columns={columns} dataSource={bots} rowKey="id" bordered />

@@ -2,7 +2,7 @@ import { Form, Input, Button } from 'antd'
 import api from '../../../api/http'
 import { messageApi } from '../../../utils/MessageHolder'
 
-export default function CreateBotForm() {
+export default function CreateBotForm({ closeModal, updateBots }) {
     const [form] = Form.useForm()
 
     async function onFinish(values) {
@@ -11,6 +11,8 @@ export default function CreateBotForm() {
             const result = await api.post('/bots', values)
             if (result.code === 201) {
                 messageApi.success(result.message)
+                updateBots()
+                closeModal()
             } else {
                 messageApi.error(result.message)
             }
@@ -39,9 +41,11 @@ export default function CreateBotForm() {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        添加
-                    </Button>
+                    <div className="flex justify-end">
+                        <Button type="primary" htmlType="submit">
+                            添加
+                        </Button>
+                    </div>
                 </Form.Item>
             </Form>
         </>
