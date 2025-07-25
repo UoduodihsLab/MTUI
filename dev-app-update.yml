@@ -1,3 +1,5 @@
 provider: github
-url: https://example.com/auto-updates
+owner: uoduodihsLab
+repo: MTUI
+releaseType: release
 updaterCacheDirName: mtui-updater
