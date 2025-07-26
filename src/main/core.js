@@ -10,13 +10,13 @@ let coreProcess = null
 export function startCore() {
     const userDataPath = app.getPath('userData')
     const sessionsPath = path.join(userDataPath, 'sessions')
-    const userDbPath = path.join(userDataPath, 'mtc.db')
+    const userDbPath = path.join(userDataPath, 'mtcore.db')
 
     const resourcesPath = app.isPackaged && !is.dev
     ? process.resourcesPath 
     : path.join(__dirname, '../../')
 
-    const sourceDbPath = path.join(resourcesPath, 'mtcore', 'mtc.db')
+    const sourceDbPath = path.join(resourcesPath, 'mtcore', 'mtcore.db')
     const coreExePath = path.join(resourcesPath, 'mtcore', 'mtcore.exe')
     const coreEnvPath = path.join(resourcesPath, 'mtcore')
 
