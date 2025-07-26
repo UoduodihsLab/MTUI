@@ -59,8 +59,10 @@ export function startCore(dbPath) {
     console.log('正在启动 core...')
 
     coreProcess = spawn(coreExcutablePath, [], {
-        ...process.env,
-        DATABASE_PATH: dbPath
+        env: {
+            ...process.env,
+            DATABASE_PATH: dbPath
+        }
     })
 
     coreProcess.stdout.on('data', (data) => {
