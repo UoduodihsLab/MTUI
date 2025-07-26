@@ -40,7 +40,7 @@ export function startCore() {
     logger.info(`准备启动 MTCore: ${coreExePath}`)
 
     coreProcess = spawn(coreExePath, [], {
-        cmd: coreEnvPath,
+        cwd: coreEnvPath,
         env: {
             ...process.env,
             SESSIONS_PATH: sessionsPath,
