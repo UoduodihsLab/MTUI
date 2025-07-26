@@ -5,7 +5,7 @@ import ActionColumn from './ActionColumn'
 import TaskProgress from './TaskProgress'
 import { localFTime } from '@renderer/utils/tools'
 
-export default function TaskTable({ tasks, updateTasks }) {
+export default function TaskTable({ tasks, updateTasks, pagination, handleTableChange }) {
     const columns = [
         { title: '编号', dataIndex: 'id', key: 'id' },
         { title: '名称', dataIndex: 'title', key: 'title' },
@@ -38,5 +38,14 @@ export default function TaskTable({ tasks, updateTasks }) {
         }
     ]
 
-    return <Table columns={columns} dataSource={tasks} rowKey="id" bordered />
+    return (
+        <Table
+            columns={columns}
+            dataSource={tasks}
+            rowKey="id"
+            bordered
+            pagination={pagination.pgProps}
+            onChange={handleTableChange}
+        />
+    )
 }

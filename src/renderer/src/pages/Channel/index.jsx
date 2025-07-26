@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react'
 import { Table, Tag } from 'antd'
 import PageView from '@renderer/components/PageView'
 import api from '@renderer/api/http'
+import usePagination from '@renderer/hooks/usePagination'
 import { messageApi } from '@renderer/utils/MessageHolder'
 
 export default function Channel() {
     const [channels, setChannels] = useState([])
-
+    const pagination = usePagination()
     const columns = [
         { title: '编号', dataIndex: 'id' },
         { title: '频道ID', dataIndex: 'channel_tid' },
@@ -35,6 +36,7 @@ export default function Channel() {
             if (res.code === 200) {
                 const data = res.data.channels
                 setChannels(data)
+                pagination.update(page, size, res.data.count)
             }
         } catch (error) {
             console.error(error)
@@ -44,10 +46,21 @@ export default function Channel() {
     useEffect(() => {
         getChannels()
     }, [])
+
+    function handleTableChange(newPagination) {
+        getChannels(newPagination.current, newPagination.pageSize)
+    }
     return (
         <>
             <PageView>
-                <Table columns={columns} dataSource={channels} rowKey="id" bordered />
+                <Table
+                    columns={columns}
+                    dataSource={channels}
+                    rowKey="id"
+                    bordered
+                    pagination={pagination.pgProps}
+                    onChange={handleTableChange}
+                />
             </PageView>
         </>
     )

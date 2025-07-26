@@ -9,16 +9,21 @@ import CreateTaskForm from './components/TaskForms/CreateTaskForm'
 
 import api from '@renderer/api/http'
 
+import usePagination from '@renderer/hooks/usePagination'
+
 function Task() {
     const createModal = useTModal()
 
     const [tasks, setTasks] = useState([])
 
+    const pagination = usePagination()
+
     async function getTasks(page = 1, size = 10) {
         try {
-            const result = await api.get(`/tasks`)
+            const result = await api.get(`/tasks?page=${page}&size=${size}`)
             if (result.code === 200) {
                 setTasks(result.data.tasks)
+                pagination.update(page, size, result.data.count)
             }
         } catch (error) {
             console.error(error)
@@ -47,6 +52,10 @@ function Task() {
         return () => clearInterval(intervalID)
     }, [hasInProgressTasks])
 
+    function handleTableChange(newPagination) {
+        getTasks(newPagination.current, newPagination.pageSize)
+    }
+
     return (
         <PageView>
             <Space>
@@ -56,7 +65,12 @@ function Task() {
             </Space>
 
             <div className="mt-[12px]">
-                <TaskTable tasks={tasks} updateTasks={updateTasks} />
+                <TaskTable
+                    tasks={tasks}
+                    updateTasks={updateTasks}
+                    pagination={pagination}
+                    handleTableChange={handleTableChange}
+                />
             </div>
 
             <div>

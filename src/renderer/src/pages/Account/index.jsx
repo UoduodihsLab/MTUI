@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Table, Button } from 'antd'
 import api from '@renderer/api/http'
+import usePagination from '@renderer/hooks/usePagination'
 import { localFTime } from '@renderer/utils/tools'
 
 import PageView from '../../components/PageView'
 export default function Account() {
     const [accounts, setAccounts] = useState([])
+    const pagination = usePagination()
+
     const columns = [
         { title: '编号', dataIndex: 'id' },
         { title: '名称', dataIndex: 'phone', ellipsis: true },
@@ -13,12 +16,12 @@ export default function Account() {
         {
             title: '冻结',
             dataIndex: 'is_banned',
-            render: (value) => (value === 1 ? '是' : '否')
+            render: (value) => (value ? '是' : '否')
         },
         {
             title: '临时',
             dataIndex: 'is_tmp',
-            render: (value) => (value === 1 ? '是' : '否')
+            render: (value) => (value ? '是' : '否')
         },
         {
             title: '限制时间',
@@ -51,6 +54,7 @@ export default function Account() {
             if (res.code === 200) {
                 const data = res.data.accounts
                 setAccounts(data)
+                pagination.update(page, size, res.data.count)
             }
         } catch (error) {
             console.error(error)
@@ -59,7 +63,12 @@ export default function Account() {
 
     useEffect(() => {
         getAccounts()
-    })
+    }, [])
+
+    function handleTableChange(newPagination) {
+        getAccounts(newPagination.current, newPagination.pageSize)
+    }
+
     return (
         <>
             <PageView>
@@ -69,6 +78,8 @@ export default function Account() {
                     rowKey="id"
                     bordered
                     scroll={{ x: 'max-content' }}
+                    pagination={pagination.pgProps}
+                    onChange={handleTableChange}
                 />
             </PageView>
         </>
