@@ -1,7 +1,7 @@
 import os from 'os'
 import path from 'path'
 import fs from 'fs'
-const log = require('electron-log')
+import logger from 'electron-log'
 
 const logDir = path.join(os.homedir(), 'MTDesktopLogs')
 
@@ -9,12 +9,12 @@ if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir, { recursive: true })
 }
 
-log.transports.file.resolvePathFn = () => path.join(logDir, 'MTDesktop.log')
+logger.transports.file.resolvePathFn = () => path.join(logDir, 'MTDesktop.log')
 
-log.transports.console.level = 'info'
-log.transports.file.level = 'info'
+logger.transports.console.level = 'info'
+logger.transports.file.level = 'info'
 
-log.info('日志初始化成功')
-console.log('日志路径:', log.transports.file.getFile().path)
+logger.info('日志系统初始化成功')
+logger.info('日志路径:', logger.transports.file.getFile().path)
 
-export default log
+export default logger
