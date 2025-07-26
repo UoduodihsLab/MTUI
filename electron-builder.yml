@@ -50,5 +50,5 @@ electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
 
 extraResources:
-  from: ./extra
-  to: core
+  from: ./mtcore
+  to: mtcore

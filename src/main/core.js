@@ -16,9 +16,9 @@ export function startCore() {
     ? process.resourcesPath 
     : path.join(__dirname, '../../')
 
-    const sourceDbPath = path.join(resourcesPath, 'extra', 'mtc.db')
-    const coreExePath = path.join(resourcesPath, 'extra', 'MTCore.exe')
-    const coreEnvPath = path.join(resourcesPath, 'extra')
+    const sourceDbPath = path.join(resourcesPath, 'mtcore', 'mtc.db')
+    const coreExePath = path.join(resourcesPath, 'mtcore', 'mtcore.exe')
+    const coreEnvPath = path.join(resourcesPath, 'mtcore')
 
     logger.info('正在初始化用户数据...')
     try {
