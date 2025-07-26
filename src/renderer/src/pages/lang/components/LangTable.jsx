@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react'
 import { Table } from 'antd'
-import api from '../../../api/http'
 
 export default function LangTable({ langs }) {
     const columns = [

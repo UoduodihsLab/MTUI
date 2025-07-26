@@ -5,7 +5,7 @@ import usePagination from '@renderer/hooks/usePagination'
 import { localFTime } from '@renderer/utils/tools'
 import useTModal from '@renderer/hooks/useTModal'
 
-import PageView from '../../components/PageView'
+import PageView from '@renderer/components/PageView'
 
 import LoginForm from './LoginForm'
 

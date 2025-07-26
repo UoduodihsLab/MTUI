@@ -3,7 +3,6 @@ import { Table, Tag } from 'antd'
 import PageView from '@renderer/components/PageView'
 import api from '@renderer/api/http'
 import usePagination from '@renderer/hooks/usePagination'
-import { messageApi } from '@renderer/utils/MessageHolder'
 
 export default function Channel() {
     const [channels, setChannels] = useState([])

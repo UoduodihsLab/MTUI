@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Button, Modal } from 'antd'
-import useTModal from '../../hooks/useTModal'
-import PageView from '../../components/PageView'
+import useTModal from '@renderer/hooks/useTModal'
+import PageView from '@renderer/components/PageView'
 import CreateLangForm from './components/CreateLangForm'
 import LangTable from './components/LangTable'
 

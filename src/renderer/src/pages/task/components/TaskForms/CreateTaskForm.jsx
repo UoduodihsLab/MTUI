@@ -1,8 +1,8 @@
 import { Form, Input, Select, Button } from 'antd'
 import useCreateTaskForm from '../../hooks/useCreateTaskForm'
-import api from '../../../../api/http'
+import api from '@renderer/api/http'
 
-import { messageApi } from '../../../../utils/MessageHolder'
+import { messageApi } from '@renderer/utils/MessageHolder'
 
 export default function CreateTaskForm({ updateTasks, closeModal }) {
     const { taskTypes, form, DynamicFormComponent, handleTypeChange } = useCreateTaskForm()

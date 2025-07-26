@@ -1,8 +1,4 @@
-import { useEffect, useState } from 'react'
 import { Table, Space, Button } from 'antd'
-
-import api from '../../../api/http'
-import { messageApi } from '../../../utils/MessageHolder'
 
 const columns = [
     { title: '编号', dataIndex: 'id' },

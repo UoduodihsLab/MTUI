@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Button, Modal } from 'antd'
 
-import PageView from '../../components/PageView'
+import PageView from '@renderer/components/PageView'
 import BotTable from './components/BotTable'
 import CreateBotForm from './components/CreateBotForm'
-import useTModal from '../../hooks/useTModal'
+import useTModal from '@renderer/hooks/useTModal'
 
 import api from '@renderer/api/http'
 

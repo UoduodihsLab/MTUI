@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Form, Select, InputNumber, Input, TimePicker } from 'antd'
 
-import api from '../../../../api/http'
+import api from '@renderer/api/http'
 
-import { messageApi } from '../../../../utils/MessageHolder'
+import { messageApi } from '@renderer/utils/MessageHolder'
 
 export default function PostArgsForm() {
     const [channels, setChannels] = useState([])
@@ -33,7 +33,7 @@ export default function PostArgsForm() {
                 name={['args', 0]}
                 rules={[{ required: true, message: '请至少选择一个频道' }]}
             >
-                <Select mode='multiple' options={channels} placeholder="请选择需要发布内容的频道" />
+                <Select mode="multiple" options={channels} placeholder="请选择需要发布内容的频道" />
             </Form.Item>
             <Form.Item
                 label="内容数量"

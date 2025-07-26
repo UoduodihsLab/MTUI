@@ -1,6 +1,6 @@
 import { Form, Input, Button } from 'antd'
-import api from '../../../api/http'
-import { messageApi } from '../../../utils/MessageHolder'
+import api from '@renderer/api/http'
+import { messageApi } from '@renderer/utils/MessageHolder'
 
 export default function CreateBotForm({ closeModal, updateBots }) {
     const [form] = Form.useForm()

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Form, Input, InputNumber, Select } from 'antd'
-import api from '../../../../api/http'
+import api from '@renderer/api/http'
 
-import { messageApi } from '../../../../utils/MessageHolder'
+import { messageApi } from '@renderer/utils/MessageHolder'
 
 export default function ChannelArgsForm() {
     const [languages, setLanguages] = useState([])
@@ -12,7 +12,11 @@ export default function ChannelArgsForm() {
         try {
             const result = await api.get('/langs')
             if (result.code === 200) {
-                const data = result.data.map((item) => ({key: item.id, label: item.title, value: item.title }))
+                const data = result.data.map((item) => ({
+                    key: item.id,
+                    label: item.title,
+                    value: item.title
+                }))
                 setLanguages(data)
             }
         } catch (error) {
