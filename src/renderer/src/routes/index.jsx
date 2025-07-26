@@ -2,11 +2,11 @@ import { createHashRouter } from 'react-router'
 
 import CustomLayout from '../layouts/CustomLayout'
 import Home from '../pages/Home'
-import Task from '../pages/Task'
-import Bot from '../pages/Bot'
-import Account from '../pages/Account'
-import Channel from '../pages/Channel'
-import Lang from '../pages/Language'
+import Task from '../pages/task'
+import Bot from '../pages/bot'
+import Account from '../pages/account'
+import Channel from '../pages/channel'
+import Lang from '../pages/lang'
 
 const router = createHashRouter([
     {
