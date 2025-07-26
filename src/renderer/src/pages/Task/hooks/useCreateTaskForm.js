@@ -11,7 +11,7 @@ const componentMap = {
 }
 
 const taskTypes = [
-    { label: '导入账号', value: 'account' },
+    { label: '导入账号', value: 'account', disabled: true },
     { label: '批量创建频道', value: 'channel' },
     { label: '批量发布内容', value: 'post' }
 ]

@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react'
-import { Table, Button } from 'antd'
+import { Table, Button, Modal } from 'antd'
 import api from '@renderer/api/http'
 import usePagination from '@renderer/hooks/usePagination'
 import { localFTime } from '@renderer/utils/tools'
+import useTModal from '@renderer/hooks/useTModal'
 
 import PageView from '../../components/PageView'
+
+import LoginForm from './LoginForm'
+
 export default function Account() {
     const [accounts, setAccounts] = useState([])
     const pagination = usePagination()
@@ -69,9 +73,14 @@ export default function Account() {
         getAccounts(newPagination.current, newPagination.pageSize)
     }
 
+    const loginModal = useTModal()
+
     return (
-        <>
-            <PageView>
+        <PageView>
+            <div>
+                <Button onClick={loginModal.openModal}>账号登录</Button>
+            </div>
+            <div className="mt-[12px]">
                 <Table
                     columns={columns}
                     dataSource={accounts}
@@ -81,7 +90,11 @@ export default function Account() {
                     pagination={pagination.pgProps}
                     onChange={handleTableChange}
                 />
-            </PageView>
-        </>
+            </div>
+
+            <Modal title="登录Telegram账号" {...loginModal.modalProps} footer={null}>
+                <LoginForm />
+            </Modal>
+        </PageView>
     )
 }
