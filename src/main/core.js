@@ -10,7 +10,7 @@ import logger from './logger'
 let coreProcess = null
 
 export async function ensureDatabaseExists() {
-    const userDataPath = ''
+    let userDataPath = ''
     try {
         userDataPath = app.getPath('userData')
     } catch (error) {
