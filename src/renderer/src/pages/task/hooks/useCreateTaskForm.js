@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react'
 import { Form } from 'antd'
-import AccountArgsForm from '../components/TaskForms/AccountArgsForm'
-import ChannelArgsForm from '../components/TaskForms/ChannelArgsForm'
-import PostArgsForm from '../components/TaskForms/PostArgsForm'
+import AccountArgsForm from '../components/forms/AccountArgsForm'
+import ChannelArgsForm from '../components/forms/ChannelArgsForm'
+import PostArgsForm from '../components/forms/PostArgsForm'
 
 const componentMap = {
     account: AccountArgsForm,

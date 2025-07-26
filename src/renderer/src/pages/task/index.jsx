@@ -5,7 +5,7 @@ import PageView from '@renderer/components/PageView'
 import useTModal from '@renderer/hooks/useTModal'
 import TaskTable from '@renderer/pages/Task/components/table/TaskTable'
 
-import CreateTaskForm from './components/TaskForms/CreateTaskForm'
+import CreateTaskForm from './components/forms/CreateTaskForm'
 
 import api from '@renderer/api/http'
 
