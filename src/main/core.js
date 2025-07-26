@@ -5,10 +5,19 @@ import path from 'path'
 import { is } from '@electron-toolkit/utils'
 import { spawn } from 'child_process'
 
+import logger from './logger'
+
 let coreProcess = null
 
 export async function ensureDatabaseExists() {
-    const userDataPath = app.getPath('userData')
+    const userDataPath = ''
+    try {
+        userDataPath = app.getPath('userData')
+    } catch (error) {
+        logger.error(error)
+        throw new Error('无法初始化数据库')
+    }
+
     const userDbPath = path.join(userDataPath, 'mtc.db')
 
     let templateDbPath = ''
@@ -20,14 +29,16 @@ export async function ensureDatabaseExists() {
 
     try {
         await fs.access(userDbPath)
+        logger.info(`已找到 ${userDbPath} `)
         return userDbPath
     } catch (error) {
-        console.error(error)
+        logger.error(`访问 ${userDbPath} 失败: `, error)
         try {
             await fs.copyFile(templateDbPath, userDbPath)
+            logger.info('正在使用:', userDbPath)
             return userDbPath
         } catch (copyError) {
-            console.error(copyError)
+            logger.error(`拷贝 ${templateDbPath} 到 ${userDbPath} 失败`, copyError)
             throw new Error('无法初始化数据库')
         }
     }
