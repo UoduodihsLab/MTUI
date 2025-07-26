@@ -4,6 +4,7 @@ import windowManager from './app-window'
 import setupIPCHandlers from './ipc-handlers'
 import { ensureDatabaseExists, startCore } from './core'
 import logger from './logger'
+import { execSync } from 'child_process'
 
 // 将 coreProcess 声明在顶部，以便在整个文件中访问
 let coreProcess = null
@@ -11,17 +12,30 @@ let coreProcess = null
 // 将清理函数提取出来，便于复用和管理
 const cleanup = () => {
     if (coreProcess) {
-        logger.info('正在尝试终止 MTCore 进程...')
+        // logger.info('正在尝试终止 MTCore 进程...')
         // 在 Windows 上，SIGKILL 可能效果不佳，但对于 POSIX 系统（macOS, Linux）是有效的。
         // kill() 方法会尽力终止进程。
         // 对于顽固的进程，可以明确发送 'SIGKILL' 信号。
-        const killed = coreProcess.kill('SIGKILL')
-        if (killed) {
-            logger.info('成功发送终止信号到 MTCore 进程。')
+        // const killed = coreProcess.kill('SIGKILL')
+        // if (killed) {
+        //     logger.info('成功发送终止信号到 MTCore 进程。')
+        // } else {
+        //     logger.error('无法终止 MTCore 进程。')
+        // }
+        // coreProcess = null
+        logger.info('正在关闭MTCore子进程...')
+
+        if (process.platform === 'win32') {
+            try {
+                execSync(`taskkill /pid ${coreProcess.pid} /f /t`)
+                logger.info('MTCore 进程树已成功终止')
+            } catch (error) {
+                logger.error('使用 taskkill 终止进程失败:', error)
+                coreProcess.kill('SIGKILL')
+            }
         } else {
-            logger.error('无法终止 MTCore 进程。')
+            coreProcess.kill('SIGKILL')
         }
-        coreProcess = null
     }
 }
 
