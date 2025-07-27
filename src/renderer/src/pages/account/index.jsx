@@ -93,7 +93,7 @@ export default function Account() {
             </div>
 
             <Modal title="登录Telegram账号" {...loginModal.modalProps} footer={null}>
-                <LoginForm />
+                <LoginForm updateAccounts={getAccounts} />
             </Modal>
         </PageView>
     )

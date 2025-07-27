@@ -3,7 +3,7 @@ import { Form, Input, Space, Button } from 'antd'
 import api from '@renderer/api/http'
 import { messageApi } from '@renderer/utils/MessageHolder'
 
-export default function LoginForm() {
+export default function LoginForm({updateAccounts}) {
     const [form] = Form.useForm()
     const [pch, setPch] = useState('')
 
@@ -38,6 +38,7 @@ export default function LoginForm() {
             const res = await api.post('/accounts/login/complete', payload)
             if (res.code === 200) {
                 form.resetFields()
+                updateAccounts()
                 messageApi.success(res.message)
             } else {
                 messageApi.error(res.message)
