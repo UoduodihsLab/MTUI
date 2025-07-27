@@ -1,8 +1,9 @@
 import { Space, Button } from 'antd'
+import {useTaskDetailModal} from '../../context/TaskDetailModalContext'
 import taskApi from '@renderer/api/task'
 import { messageApi } from '@renderer/utils/MessageHolder'
 
-export default function ActionColumn({ record, updateTasks }) {
+export default function ActionColumn({ record, updateTasks, openDetailsModal }) {
     async function handleStartTask() {
         try {
             const res = await taskApi.startTask(record.id)
@@ -22,14 +23,17 @@ export default function ActionColumn({ record, updateTasks }) {
             启动
         </Button>
     )
+
+    const { show } = useTaskDetailModal()
+    const detailsButton = (
+        <Button type="info" size="small" onClick={() => show(record)}>
+            详情
+        </Button>
+    )
     return (
-        <>
-            <Space>
-                {status === 0 ? startButton : null}
-                <Button type="info" size="small">
-                    详情
-                </Button>
-            </Space>
-        </>
+        <Space>
+            {status === 0 ? startButton : null}
+            {status !== 0 || status !== 1 ? detailsButton : null}
+        </Space>
     )
 }

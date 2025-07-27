@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { Space, Button, Modal } from 'antd'
 
 import PageView from '@renderer/components/PageView'
+import { TaskDetailModalProvider } from './context/TaskDetailModalContext'
 import useTModal from '@renderer/hooks/useTModal'
 import TaskTable from '@renderer/pages/Task/components/table/TaskTable'
 
@@ -65,12 +66,14 @@ function Task() {
             </Space>
 
             <div className="mt-[12px]">
-                <TaskTable
-                    tasks={tasks}
-                    updateTasks={updateTasks}
-                    pagination={pagination}
-                    handleTableChange={handleTableChange}
-                />
+                <TaskDetailModalProvider>
+                    <TaskTable
+                        tasks={tasks}
+                        updateTasks={updateTasks}
+                        pagination={pagination}
+                        handleTableChange={handleTableChange}
+                    />
+                </TaskDetailModalProvider>
             </div>
 
             <div>
