@@ -16,7 +16,7 @@ export default function Account() {
     const columns = [
         { title: '编号', dataIndex: 'id' },
         { title: '名称', dataIndex: 'phone', ellipsis: true },
-        { title: '路径', dataIndex: 'path', ellipsis: true },
+        // { title: '路径', dataIndex: 'path', ellipsis: true },
         {
             title: '冻结',
             dataIndex: 'is_banned',
