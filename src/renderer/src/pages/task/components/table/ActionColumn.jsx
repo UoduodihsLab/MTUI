@@ -1,12 +1,12 @@
 import { Space, Button } from 'antd'
 import {useTaskDetailModal} from '../../context/TaskDetailModalContext'
-import taskApi from '@renderer/api/task'
+import api from '@renderer/api/http'
 import { messageApi } from '@renderer/utils/MessageHolder'
 
 export default function ActionColumn({ record, updateTasks, openDetailsModal }) {
     async function handleStartTask() {
         try {
-            const res = await taskApi.startTask(record.id)
+            const res = await api.post(`/tasks/${record.id}/start`)
             if (res.code === 200) {
                 messageApi.success(res.message)
                 updateTasks()
@@ -32,8 +32,8 @@ export default function ActionColumn({ record, updateTasks, openDetailsModal }) 
     )
     return (
         <Space>
-            {status === 0 ? startButton : null}
-            {status !== 0 || status !== 1 ? detailsButton : null}
+            {status === '待处理' || status === '部分完成' ? startButton : null}
+            {status !== '待处理' || status !== '执行中' ? detailsButton : null}
         </Space>
     )
 }

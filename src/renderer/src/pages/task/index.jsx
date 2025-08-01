@@ -40,7 +40,7 @@ function Task() {
     }, [])
 
     const hasInProgressTasks = useMemo(() => {
-        return tasks.some((task) => task.status === 1)
+        return tasks.some((task) => task.status === '执行中')
     }, [tasks])
 
     useEffect(() => {

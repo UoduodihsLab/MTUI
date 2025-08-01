@@ -15,16 +15,11 @@ export default function Account() {
 
     const columns = [
         { title: '编号', dataIndex: 'id' },
-        { title: '名称', dataIndex: 'phone', ellipsis: true },
+        { title: '名称', dataIndex: 'session_name', ellipsis: true },
         // { title: '路径', dataIndex: 'path', ellipsis: true },
         {
             title: '冻结',
             dataIndex: 'is_banned',
-            render: (value) => (value ? '是' : '否')
-        },
-        {
-            title: '临时',
-            dataIndex: 'is_tmp',
             render: (value) => (value ? '是' : '否')
         },
         {

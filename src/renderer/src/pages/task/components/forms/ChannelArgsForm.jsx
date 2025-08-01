@@ -4,73 +4,61 @@ import api from '@renderer/api/http'
 
 import { messageApi } from '@renderer/utils/MessageHolder'
 
+const { TextArea } = Input
+
 export default function ChannelArgsForm() {
-    const [languages, setLanguages] = useState([])
-    const [bots, setBots] = useState([])
+    const [accounts, setAccounts] = useState([])
 
-    async function getLanguages() {
+    async function getAccounts() {
         try {
-            const result = await api.get('/langs')
-            if (result.code === 200) {
-                const data = result.data.map((item) => ({
-                    key: item.id,
-                    label: item.title,
-                    value: item.title
+            const res = await api.get('/accounts')
+            if (res.code === 200) {
+                const data = res.data.accounts.map((item) => ({
+                    label: item.session_name,
+                    value: item.id
                 }))
-                setLanguages(data)
+                setAccounts(data)
+            } else {
+                messageApi.error(res.message)
             }
         } catch (error) {
-            messageApi.error('获取语言列表失败')
-        }
-    }
-
-    async function getBots() {
-        try {
-            const result = await api.get('/bots')
-            if (result.code === 200) {
-                const data = result.data.map((item) => ({ label: item.username, value: item.id }))
-                setBots(data)
-            }
-        } catch (error) {
-            messageApi.error('获取机器人列表失败')
+            messageApi.error('网络错误')
         }
     }
 
     useEffect(() => {
-        getLanguages()
-        getBots()
+        getAccounts()
     }, [])
-
     return (
         <>
             <Form.Item
                 label="频道数量"
-                name={['args', 0]}
-                rules={[{ required: true, message: '频道数量不能为空' }]}
+                name={['args', 'total']}
+                rules={[
+                    { required: true, message: '必须选择一个账号来创建频道' },
+                    { type: 'number', max: 10, message: '每个账号最多创建10个频道' },
+                    { type: 'number', min: 1, message: '至少创建一个频道' }
+                ]}
             >
-                <InputNumber type="number" />
+                <InputNumber
+                    type="number"
+                    placeholder="输入要创建的频道数量"
+                    style={{ width: '100%' }}
+                />
             </Form.Item>
             <Form.Item
-                label="频道语言"
-                name={['args', 1]}
-                rules={[{ required: true, message: '频道语言不能为空' }]}
+                label="选择账号"
+                name={['args', 'account_id']}
+                rules={[{ required: true, message: '必须选择一个账号来创建频道' }]}
             >
-                <Select options={languages} placeholder="选择频道语言" allowClear />
+                <Select options={accounts} placeholder="选择账号" allowClear />
             </Form.Item>
             <Form.Item
-                label="频道名称"
-                name={['args', 2]}
-                rules={[{ required: true, message: '频道名称不能为空' }]}
+                label="初始信息"
+                name={['args', 'title_items']}
+                rules={[{ required: true, message: '初始信息不能为空' }]}
             >
-                <Input placeholder="请输入频道名称" />
-            </Form.Item>
-
-            <Form.Item
-                label="机器人"
-                name={['args', 3]}
-                rules={[{ required: true, message: '必须选择一个机器人作为频道管理员' }]}
-            >
-                <Select options={bots} placeholder="选择机器人作为频道管理员" allowClear />
+                <TextArea placeholder="格式: 频道名称+空格+频道语言, 例如: ChannelTitle 英语, 每行一条" />
             </Form.Item>
         </>
     )
