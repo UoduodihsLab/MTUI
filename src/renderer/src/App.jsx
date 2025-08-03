@@ -1,4 +1,4 @@
-import CustomLayout from './layouts/CustomLayout'
+import CustomLayout from '@renderer/layout/CustomLayout'
 
 function App() {
     return <CustomLayout />

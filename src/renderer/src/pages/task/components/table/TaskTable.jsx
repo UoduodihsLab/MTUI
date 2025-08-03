@@ -11,12 +11,13 @@ export default function TaskTable({ tasks, updateTasks, pagination, handleTableC
         { title: '名称', dataIndex: 'title'},
         { title: '类型', dataIndex: 't_type'},
         { title: '参数', dataIndex: 'args', ellipsis: true },
-        { title: '状态', dataIndex: 'status'},
+        { title: '状态', dataIndex: 'status', render: (value)=><><TaskStatus status={value} /></>},
         {
             title: '进度',
             dataIndex: 'progress',
             key: 'progress',
             ellipsis: true,
+            width: 250,
             render: (_, record) => <TaskProgress record={record} />
         },
         {

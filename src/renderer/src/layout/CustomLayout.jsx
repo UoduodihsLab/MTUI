@@ -1,10 +1,12 @@
 import { useNavigate, Outlet } from 'react-router'
+import zhCN from 'antd/locale/zh_CN'
+import 'dayjs//locale/zh-cn'
 import { ConfigProvider, Layout } from 'antd'
 import { Menu, message, Button, Modal } from 'antd'
 import useTModal from '@renderer/hooks/useTModal'
 import { setMessageApi } from '../utils/MessageHolder'
 import { UpdaterProvider } from '@renderer/context/UpdaterContext'
-import MTUpdater from './MTUpdater'
+import MTUpdater from '@renderer/components/MTUpdater'
 
 const { Sider, Header, Content } = Layout
 
@@ -16,10 +18,6 @@ function CustomLayout() {
     const updaterModal = useTModal()
 
     const items = [
-        // {
-        //     key: '/home',
-        //     label: '主页'
-        // },
         {
             key: '/account',
             label: '账号管理'
@@ -36,10 +34,6 @@ function CustomLayout() {
             key: '/task',
             label: '任务管理'
         },
-        {
-            key: '/lang',
-            label: '语言管理'
-        }
     ]
 
     const navigate = useNavigate()
@@ -49,7 +43,7 @@ function CustomLayout() {
     }
 
     return (
-        <ConfigProvider>
+        <ConfigProvider locale={zhCN}>
             {contextHolder}
             <UpdaterProvider>
                 <Layout className="h-full">
@@ -71,7 +65,7 @@ function CustomLayout() {
                             <Outlet />
                         </Content>
                     </Layout>
-                    <Modal title='更新' {...updaterModal.modalProps} footer={null}>
+                    <Modal title="更新" {...updaterModal.modalProps} footer={null}>
                         <MTUpdater />
                     </Modal>
                 </Layout>

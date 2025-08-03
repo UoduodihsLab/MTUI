@@ -26,7 +26,7 @@ export default function ActionColumn({ record, updateTasks, openDetailsModal }) 
 
     const { show } = useTaskDetailModal()
     const detailsButton = (
-        <Button type="info" size="small" onClick={() => show(record)}>
+        <Button size="small" onClick={() => show(record)}>
             详情
         </Button>
     )

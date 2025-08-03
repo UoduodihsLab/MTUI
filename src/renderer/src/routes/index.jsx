@@ -1,22 +1,16 @@
 import { createHashRouter } from 'react-router'
 
-import CustomLayout from '../layouts/CustomLayout'
-import Home from '../pages/Home'
-import Task from '../pages/task'
-import Bot from '../pages/bot'
-import Account from '../pages/account'
-import Channel from '../pages/channel'
-import Lang from '../pages/lang'
+import CustomLayout from '@renderer/layout/CustomLayout'
+import Task from '@renderer/pages/task'
+import Bot from '@renderer/pages/bot'
+import Account from '@renderer/pages/account'
+import Channel from '@renderer/pages/channel'
 
 const router = createHashRouter([
     {
         path: '/',
         Component: CustomLayout,
         children: [
-            {
-                path: '/home',
-                Component: Home
-            },
             {
                 path: '/account',
                 Component: Account
@@ -33,10 +27,6 @@ const router = createHashRouter([
                 path: '/bot',
                 Component: Bot
             },
-            {
-                path: '/lang',
-                Component: Lang
-            }
         ]
     }
 ])

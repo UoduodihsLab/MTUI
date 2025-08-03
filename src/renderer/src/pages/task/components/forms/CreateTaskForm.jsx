@@ -45,23 +45,27 @@ export default function CreateTaskForm({ updateTasks, closeModal }) {
                 />
             </Form.Item>
 
-            <Form.Item
-                label="任务名称"
-                name="title"
-                rules={[{ required: true, message: '请输入任务名称' }]}
-            >
-                <Input placeholder="输入任务名称" />
-            </Form.Item>
+            {form.getFieldValue('t_type') && (
+                <Form.Item
+                    label="任务名称"
+                    name="title"
+                    rules={[{ required: true, message: '请输入任务名称' }]}
+                >
+                    <Input placeholder="输入任务名称" />
+                </Form.Item>
+            )}
 
             {DynamicFormComponent && <DynamicFormComponent form={form} />}
 
-            <Form.Item>
-                <div className="flex justify-end">
-                    <Button type="primary" htmlType="submit">
-                        提交
-                    </Button>
-                </div>
-            </Form.Item>
+            {form.getFieldValue('t_type') && (
+                <Form.Item>
+                    <div className="flex justify-end">
+                        <Button type="primary" htmlType="submit">
+                            提交
+                        </Button>
+                    </div>
+                </Form.Item>
+            )}
         </Form>
     )
 }
