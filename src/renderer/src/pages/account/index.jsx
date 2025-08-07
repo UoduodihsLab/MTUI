@@ -24,7 +24,7 @@ export default function Account() {
         },
         {
             title: '限制时间',
-            dataIndex: 'limited_until',
+            dataIndex: 'flood_until',
             render: (value) => (value ? localFTime(value) : '-')
         },
         { title: '频道数量', dataIndex: 'channels_count' },

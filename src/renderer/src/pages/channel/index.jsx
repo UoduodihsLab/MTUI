@@ -55,6 +55,23 @@ export default function Channel() {
                 messageApi.error(res.message)
             }
         } catch (error) {
+            console.error(error)
+            messageApi.error('网络错误')
+        }
+    }
+
+    async function startSetLinks() {
+        try {
+            const payload = { channel_ids: selectedRowKeys }
+            const res = await api.post('/channels/links', payload)
+            if (res.code === 200) {
+                getChannels(pagination.page, pagination.size)
+                messageApi.success(res.message)
+            } else {
+                messageApi.error(res.message)
+            }
+        } catch (error) {
+            console.error(error)
             messageApi.error('网络错误')
         }
     }
@@ -77,6 +94,13 @@ export default function Channel() {
                             disabled={selectedRowKeys.length < 1}
                         >
                             自动生成 username
+                        </Button>
+                        <Button
+                            onClick={startSetLinks}
+                            type="primary"
+                            disabled={selectedRowKeys.length < 1}
+                        >
+                            生成频道链接
                         </Button>
                         <Button
                             onClick={modalToSetAbout.openModal}

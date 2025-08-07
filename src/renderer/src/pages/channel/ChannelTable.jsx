@@ -50,11 +50,11 @@ export default function ChannelTable({
             title: '操作',
             fixed: 'right',
             width: 200,
-            render: (_, record) => (
-                <>
-                    <Button size="small">测试</Button>
-                </>
-            )
+            // render: (_, record) => (
+            //     <>
+            //         <Button size="small">测试</Button>
+            //     </>
+            // )
         }
     ]
 

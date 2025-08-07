@@ -34,7 +34,11 @@ export default function SetPhotoForm({ selectedRowKeys, getChannels, pagination 
     return (
         <>
             <Form form={form} onFinish={onFinish} initialValues={{ photo_dir: '' }}>
-                <Form.Item label="头像目录" name="photo_dir">
+                <Form.Item
+                    label="头像目录"
+                    name="photo_dir"
+                    rules={[{ required: true, message: '必须选择一个头像目录' }]}
+                >
                     <Input onClick={selectPhotoDir} readOnly placeholder="点击选择头像目录" />
                 </Form.Item>
                 <Form.Item>

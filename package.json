@@ -20,6 +20,7 @@
     "publish:mac": "npm run build && electron-builder --mac --config -p always"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.6.1",
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
     "@tailwindcss/vite": "^4.1.11",

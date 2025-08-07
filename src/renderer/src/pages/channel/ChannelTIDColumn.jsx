@@ -10,7 +10,7 @@ export default function AboutColumn({ record }) {
             text = '未同步'
             break
         case 2:
-            color = '#3498db'
+            color = '#2ecc71'
             text = '已同步'
             break
     }
@@ -20,7 +20,7 @@ export default function AboutColumn({ record }) {
             {record.c_status !== 1 && (
                     <Space>
                         <Tag color={color}>{text}</Tag>
-                        <span>{record.username}</span>
+                        <span>{record.tid}</span>
                     </Space>
             )}
         </>
