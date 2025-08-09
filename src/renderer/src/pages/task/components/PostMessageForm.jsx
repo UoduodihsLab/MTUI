@@ -90,8 +90,8 @@ export default function PostMessageForm({ form }) {
                 name={['args', 'word_count_range', 'max_count']}
                 rules={[
                     { required: true, message: '必须输入最大字数' },
-                    { type: 'number', max: 200, message: '字数最多200' },
-                    { type: 'number', min: 10, message: '字数最低10' }
+                    { type: 'number', max: 1000, message: '字数最多200' },
+                    { type: 'number', min: 200, message: '字数最低10' }
                 ]}
             >
                 <InputNumber style={{ width: '100%' }} placeholder="请输入每条内容的最大字数" />
@@ -101,8 +101,8 @@ export default function PostMessageForm({ form }) {
                 name={['args', 'word_count_range', 'min_count']}
                 rules={[
                     { required: true, message: '必须输入最少字数' },
-                    { type: 'number', max: 200, message: '字数最多200' },
-                    { type: 'number', min: 10, message: '字数最低10' }
+                    { type: 'number', max: 1000, message: '字数最多200' },
+                    { type: 'number', min: 200, message: '字数最低10' }
                 ]}
             >
                 <InputNumber style={{ width: '100%' }} placeholder="请输入每条内容的最小字数" />
