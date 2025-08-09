@@ -5,6 +5,7 @@ import PageView from '@renderer/components/PageView'
 import TaskTable from './components/TaskTable'
 import useTModal from '@renderer/hooks/useTModal'
 import CreateTaskForm from './components/CreateTaskForm'
+import Logs from './components/Logs'
 
 import api from '@renderer/api/http'
 import { messageApi } from '@renderer/utils/MessageHolder'
@@ -30,6 +31,24 @@ export default function Task() {
     }, [])
 
     const modalToCreateTask = useTModal()
+    const modalToShowLogs = useTModal()
+
+    const [logs, setLogs] = useState([])
+    async function showLogs(record) {
+        try {
+            const res = await api.get(`/tasks/${record.id}/logs`)
+            if (res.code === 200) {
+                console.log(res.data.logs)
+                setLogs(res.data.logs)
+                modalToShowLogs.openModal()
+            } else {
+                messageApi.error(res.message)
+            }
+        } catch (error) {
+            console.error(error)
+            messageApi.error('网络错误')
+        }
+    }
     return (
         <>
             <PageView>
@@ -39,12 +58,24 @@ export default function Task() {
                     </Space>
                 </div>
                 <div className="mt-[12px]">
-                    <TaskTable tasks={tasks} getTasks={getTasks} pagination={pagination} />
+                    <TaskTable
+                        tasks={tasks}
+                        getTasks={getTasks}
+                        pagination={pagination}
+                        showLogs={showLogs}
+                    />
                 </div>
 
                 <div>
                     <Modal title="创建任务" {...modalToCreateTask.modalProps} footer={null}>
                         <CreateTaskForm getTasks={getTasks} pagination={pagination} />
+                    </Modal>
+                    <Modal
+                        title="任务日志"
+                        {...modalToShowLogs.modalProps}
+                        footer={null}
+                    >
+                        <Logs logs={logs} />
                     </Modal>
                 </div>
             </PageView>
