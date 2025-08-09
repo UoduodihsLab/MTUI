@@ -13,6 +13,9 @@ export default function AboutColumn({ record }) {
             color = '#2ecc71'
             text = '已同步'
             break
+        case 3:
+            color = '#e74c3c'
+            text = '同步失败'
     }
     return (
         <>
